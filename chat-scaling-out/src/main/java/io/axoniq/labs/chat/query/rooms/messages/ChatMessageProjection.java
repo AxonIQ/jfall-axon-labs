@@ -1,6 +1,7 @@
 package io.axoniq.labs.chat.query.rooms.messages;
 
 import io.axoniq.labs.chat.coreapi.MessagePostedEvent;
+import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import java.time.Instant;
 
 @RestController
 @RequestMapping("/rooms/{roomId}/messages")
+@ProcessingGroup("messages")
 public class ChatMessageProjection {
 
     private final ChatMessageRepository repository;

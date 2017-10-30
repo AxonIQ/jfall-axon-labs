@@ -2,6 +2,7 @@ package io.axoniq.labs.chat.query.rooms.participants;
 
 import io.axoniq.labs.chat.coreapi.ParticipantJoinedRoomEvent;
 import io.axoniq.labs.chat.coreapi.ParticipantLeftRoomEvent;
+import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/rooms/{roomId}/participants")
+@ProcessingGroup("participants")
 public class RoomParticipantsProjection {
 
     private final RoomParticipantsRepository repository;
