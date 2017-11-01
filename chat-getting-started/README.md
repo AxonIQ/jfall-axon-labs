@@ -54,7 +54,7 @@ Visit: http://localhost:8080/swagger-ui.html
 The application has the H2 Console configured, so you can peek into the database's contents.
 
 Visit: http://localhost:8080/h2-console  
-Enter JDBC URL: jdbc:h2:tcp://localhost:9092/mem:testdb  
+Enter JDBC URL: jdbc:h2:mem:testdb  
 Leave other values to defaults and click 'connect'
 
 Our goal

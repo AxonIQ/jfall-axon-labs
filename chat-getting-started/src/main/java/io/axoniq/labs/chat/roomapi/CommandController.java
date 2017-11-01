@@ -12,13 +12,13 @@ public class CommandController {
 
     private final CommandGateway commandGateway;
 
-    public CommandController(CommandGateway commandGateway) {
+    public CommandController(@SuppressWarnings("SpringJavaAutowiringInspection") CommandGateway commandGateway) {
         this.commandGateway = commandGateway;
     }
 
     @PostMapping("/rooms")
     public Future<String> createChatRoom(@RequestBody @Valid Room room) {
-        // TODO: Send a command for this API call. Don't forget to default the 'roomId' to a random UUID.
+        // TODO: Send a command for this API call
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -29,7 +29,7 @@ public class CommandController {
     }
 
     @PostMapping("/rooms/{roomId}/messages")
-    public Future<Void> postMessage(@PathVariable String roomId, @RequestBody @Valid Message message) {
+    public Future<Void> postMessage(@PathVariable String roomId, @RequestBody @Valid PostMessageRequest message) {
         // TODO: Send a command for this API call
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -40,19 +40,19 @@ public class CommandController {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public static class Message {
+    public static class PostMessageRequest {
 
         @NotEmpty
-        private String name;
+        private String participant;
         @NotEmpty
         private String message;
 
-        public String getName() {
-            return name;
+        public String getParticipant() {
+            return participant;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setParticipant(String participant) {
+            this.participant = participant;
         }
 
         public String getMessage() {
