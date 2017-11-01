@@ -6,7 +6,6 @@ import io.axoniq.labs.chat.coreapi.LeaveRoomCommand;
 import io.axoniq.labs.chat.coreapi.PostMessageCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,52 +17,44 @@ public class CommandController {
 
     private final CommandGateway commandGateway;
 
-    public CommandController(CommandGateway commandGateway) {
+    public CommandController(@SuppressWarnings("SpringJavaAutowiringInspection") CommandGateway commandGateway) {
         this.commandGateway = commandGateway;
     }
 
     @PostMapping("/rooms")
     public Future<String> createChatRoom(@RequestBody @Valid Room room) {
-        Assert.notNull(room.getName(), "name is mandatory for a chatroom");
         String roomId = room.getRoomId() == null ? UUID.randomUUID().toString() : room.getRoomId();
         return commandGateway.send(new CreateRoomCommand(roomId, room.getName()));
     }
 
     @PostMapping("/rooms/{roomId}/participants")
     public Future<Void> joinChatRoom(@PathVariable String roomId, @RequestBody @Valid Participant participant) {
-        Assert.notNull(participant.getName(), "name is mandatory for a chatroom");
-
         return commandGateway.send(new JoinRoomCommand(participant.getName(), roomId));
     }
 
     @PostMapping("/rooms/{roomId}/messages")
-    public Future<Void> postMessage(@PathVariable String roomId, @RequestBody @Valid Message message) {
-        Assert.notNull(message.getName(), "'name' missing - please provide a participant name");
-        Assert.notNull(message.getMessage(), "'message' missing - please provide a message to post");
-
-        return commandGateway.send(new PostMessageCommand(message.getName(), roomId, message.getMessage()));
+    public Future<Void> postMessage(@PathVariable String roomId, @RequestBody @Valid PostMessageRequest message) {
+        return commandGateway.send(new PostMessageCommand(message.getParticipant(), roomId, message.getMessage()));
     }
 
     @DeleteMapping("/rooms/{roomId}/participants")
     public Future<Void> leaveChatRoom(@PathVariable String roomId, @RequestBody @Valid Participant participant) {
-        Assert.notNull(participant.getName(), "name is mandatory for a chatroom");
-
         return commandGateway.send(new LeaveRoomCommand(participant.getName(), roomId));
     }
 
-    public static class Message {
+    public static class PostMessageRequest {
 
         @NotEmpty
-        private String name;
+        private String participant;
         @NotEmpty
         private String message;
 
-        public String getName() {
-            return name;
+        public String getParticipant() {
+            return participant;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setParticipant(String participant) {
+            this.participant = participant;
         }
 
         public String getMessage() {

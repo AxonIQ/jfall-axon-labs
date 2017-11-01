@@ -20,9 +20,9 @@ public class ChatMessageProjection {
     }
 
     @GetMapping
-    public Page<ChatMessage> participantsInRoom(@PathVariable String roomId,
-                                                @RequestParam(defaultValue = "0") int pageId,
-                                                @RequestParam(defaultValue = "10") int pageSize) {
+    public Page<ChatMessage> messagesInRoom(@PathVariable String roomId,
+                                            @RequestParam(defaultValue = "0") int pageId,
+                                            @RequestParam(defaultValue = "10") int pageSize) {
         return repository.findAllByRoomIdOrderByTimestampDesc(roomId, new PageRequest(pageId, pageSize));
     }
 

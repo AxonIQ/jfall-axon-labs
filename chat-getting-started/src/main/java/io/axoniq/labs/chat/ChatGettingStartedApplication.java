@@ -1,5 +1,6 @@
 package io.axoniq.labs.chat;
 
+import com.google.common.base.Predicates;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -13,21 +14,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 public class ChatGettingStartedApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ChatGettingStartedApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ChatGettingStartedApplication.class, args);
+    }
 
 
-	@Configuration
+    @Configuration
     @EnableSwagger2
     public static class SwaggerConfig {
         @Bean
         public Docket api() {
             return new Docket(DocumentationType.SWAGGER_2)
-              .select()
-              .apis(RequestHandlerSelectors.any())
-              .paths(PathSelectors.any())
-              .build();
+                    .select()
+                    .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework")))
+                    .paths(PathSelectors.any())
+                    .build();
         }
     }
 }
